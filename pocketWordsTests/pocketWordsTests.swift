@@ -10,7 +10,11 @@ import XCTest
 
 final class pocketWordsTests: XCTestCase {
     
+    // MARK: - Properties
+    
     var viewModel: FlashcardViewModel!
+    
+    // MARK: - Init
     
     override func setUp() {
         super.setUp()
@@ -21,6 +25,8 @@ final class pocketWordsTests: XCTestCase {
         viewModel = nil
         super.tearDown()
     }
+    
+    // MARK: - ViewModels
     
     func testExactMatch_ReturnsTrue() {
         let result = viewModel.checkAnswer(userInput: "سیب", correctMeaning: "سیب")
@@ -57,6 +63,7 @@ final class pocketWordsTests: XCTestCase {
         XCTAssertTrue(result, "Trimming should be applied to both input and correct answer.")
     }
     
+    // MARK: - AnswerChecker
     func testCorrectAnswer() {
         XCTAssertTrue(AnswerChecker.isCorrect(userInput: " Hello ", correctAnswer: "hello"))
     }
