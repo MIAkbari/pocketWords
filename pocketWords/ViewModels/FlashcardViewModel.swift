@@ -12,9 +12,20 @@ import SwiftUI
 
 @Observable
 class FlashcardViewModel {
+    
+    // MARK: - Properties
+    
     var xp: Int = 0
     var currentIndex: Int = 0
     var wordCards: [WordCard] = []
+    var progress: Double {
+        guard !wordCards.isEmpty else { return 0.0 }
+        let total = Double(wordCards.count)
+        let correct = Double(xp / 10)
+        return correct / total
+    }
+    
+    // MARK: - Func
     
     func checkAnswer(userInput: String, correctMeaning: String) -> Bool {
         let trimmedInput = userInput.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
@@ -24,12 +35,5 @@ class FlashcardViewModel {
     
     func addXP() {
         xp += 10
-    }
-
-    var progress: Double {
-        guard !wordCards.isEmpty else { return 0.0 }
-        let total = Double(wordCards.count)
-        let correct = Double(xp / 10)
-        return correct / total
     }
 }
