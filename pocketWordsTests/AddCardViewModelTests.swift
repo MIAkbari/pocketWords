@@ -1,15 +1,24 @@
+//
+//  AddCardViewModelTests.swift
+//  pocketWords
+//
+//  Created by Mohammad on 5/13/25.
+//
+
+
 import XCTest
 import SwiftData
-@testable import YourAppName // نام پروژه خود را جایگزین کنید
+@testable import pocketWords
 
 final class AddCardViewModelTests: XCTestCase {
+    
     var viewModel: AddCardViewModel!
     var modelContext: ModelContext!
     var container: ModelContainer!
     
     override func setUp() {
         super.setUp()
-        // تنظیم مدل و استفاده از حافظه موقت
+
         let schema = Schema([WordCard.self])
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         container = try! ModelContainer(for: schema, configurations: config)
@@ -26,7 +35,7 @@ final class AddCardViewModelTests: XCTestCase {
         super.tearDown()
     }
     
-    // MARK: - تست‌های Validation
+    // MARK: -  Validation
     func testSaveButtonDisabledWhenFieldsEmpty() {
         viewModel.word = ""
         viewModel.meaning = ""
@@ -37,18 +46,18 @@ final class AddCardViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.isSaveDisabled)
         
         viewModel.word = ""
-        viewModel.meaning = "سلام"
+        viewModel.meaning = "Hello"
         XCTAssertTrue(viewModel.isSaveDisabled)
         
         viewModel.word = "Hello"
-        viewModel.meaning = "سلام"
+        viewModel.meaning = "Hello"
         XCTAssertFalse(viewModel.isSaveDisabled)
     }
     
-    // MARK: - تست‌های Saving
+    // MARK: - Saving
     func testSaveCardInsertsIntoContext() {
         viewModel.word = "Book"
-        viewModel.meaning = "کتاب"
+        viewModel.meaning = "Book"
         
         viewModel.saveCard()
         
