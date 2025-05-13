@@ -9,9 +9,13 @@
 import Foundation
 
 // MARK: - For Test
-struct AnswerChecker {
+enum AnswerChecker {
     static func isCorrect(userInput: String, correctAnswer: String) -> Bool {
-        userInput.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ==
-        correctAnswer.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        userInput
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased() ==
+        correctAnswer
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
     }
 }

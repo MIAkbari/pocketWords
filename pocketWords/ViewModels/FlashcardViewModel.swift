@@ -28,9 +28,7 @@ class FlashcardViewModel {
     // MARK: - Func
     
     func checkAnswer(userInput: String, correctMeaning: String) -> Bool {
-        let trimmedInput = userInput.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        let trimmedAnswer = correctMeaning.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        return trimmedInput == trimmedAnswer
+        return AnswerChecker.isCorrect(userInput: userInput, correctAnswer: correctMeaning)
     }
     
     func addXP() {
