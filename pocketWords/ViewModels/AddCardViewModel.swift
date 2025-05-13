@@ -1,3 +1,11 @@
+//
+//  AddCardViewModel.swift
+//  pocketWords
+//
+//  Created by Mohammad on 5/13/25.
+//
+
+
 import SwiftUI
 import SwiftData
 import OSLog
@@ -23,9 +31,16 @@ class AddCardViewModel: ObservableObject {
         
         do {
             try modelContext?.save()
-            Logger.os.debug("✅ Card saved: \(word)")
+            Logger.os.debug("✅ Card saved: \(self.word)")
         } catch {
             Logger.os.debug("❌ Error saving card: \(error.localizedDescription)")
         }
+    }
+}
+
+// MARK: - ViewModel Helpers
+extension AddCardViewModel {
+    var isSaveDisabled: Bool {
+        word.isEmpty || meaning.isEmpty
     }
 }

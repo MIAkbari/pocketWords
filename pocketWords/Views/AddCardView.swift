@@ -9,71 +9,44 @@
 
 import SwiftUI
 import SwiftData
-import OSLog
 
 struct AddCardView: View {
-    
-    // MARK: - Properties
-    
+    // MARK: - Environment & Properties
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
-    @State private var word = ""
-    @State private var meaning = ""
+    // MARK: - ViewModel
+    @StateObject private var viewModel = AddCardViewModel()
     
-    // MARK: - Body . Init
-    
+    // MARK: - Body
     var body: some View {
-        mainView
-    }
-    
-    // MARK: - Views
-    
-    private var mainView: some View {
         NavigationStack {
             formView
                 .navigationTitle("New Word")
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        saveButtonView
-                    }
-                }
+                .toolbar { saveButtonToolbarItem }
         }
+        .onAppear { viewModel.setup(modelContext: modelContext) }
     }
     
+    // MARK: - Subviews
     private var formView: some View {
         Form {
-            TextField("Word", text: $word)
+            TextField("Word", text: $viewModel.word)
                 .accessibilityLabel("TextField Save Word")
-                .accessibilityHint("Input to save the new word card")
             
-            TextField("Meaning", text: $meaning)
+            TextField("Meaning", text: $viewModel.meaning)
                 .accessibilityLabel("TextField Save Meaning")
-                .accessibilityHint("Input to save the new Meaning card")
         }
     }
     
-    private var saveButtonView: some View {
-        Button("Save") {
-            saveCard()
-            dismiss()
-
-        }
-        .disabled(word.isEmpty || meaning.isEmpty)
-        .accessibilityLabel("Save Word")
-        .accessibilityHint("Tap to save the new word card")
-
-    }
-    
-    // MARK: - Func
-    
-    private func saveCard() {
-        let card = WordCard(word: word, meaning: meaning)
-        modelContext.insert(card)
-        do {
-            try modelContext.save()
-        } catch {
-            Logger.os.debug("❌ Error saving: \(error.localizedDescription)")
+    private var saveButtonToolbarItem: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            Button("Save") {
+                viewModel.saveCard()
+                dismiss()
+            }
+            .disabled(viewModel.isSaveDisabled)
+            .accessibilityLabel("Save Word")
         }
     }
 }
