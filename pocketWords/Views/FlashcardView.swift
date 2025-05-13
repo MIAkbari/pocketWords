@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import OSLog
 
 struct FlashcardView: View {
     
@@ -14,12 +15,23 @@ struct FlashcardView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Query private var cards: [WordCard]
+    @Query private var progressList: [UserProgress]
 
     @State private var flipped = false
     @State private var currentIndex = 0
     @State private var userInput = ""
     @State private var feedbackColor: Color? = nil
     @State private var xp = 0
+    private var progress: UserProgress {
+        if let existing = progressList.first {
+            return existing
+        } else {
+            let newProgress = UserProgress()
+            modelContext.insert(newProgress)
+            return newProgress
+        }
+    }
+
     
     // MARK: - init
 
@@ -93,12 +105,12 @@ struct FlashcardView: View {
     private var progressView: some View {
         let totalXP = max(1, cards.count * 10)
         return VStack(spacing: 8) {
-            ProgressView(value: Double(xp), total: Double(totalXP))
+            ProgressView(value: Double(progress.xp), total: Double(totalXP))
                 .progressViewStyle(.linear)
                 .tint(.green)
                 .frame(height: 10)
 
-            Text("XP: \(xp) / \(totalXP)")
+            Text("XP: \(progress.xp) / \(totalXP)")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -123,8 +135,7 @@ struct FlashcardView: View {
     // MARK: - Functions
 
     private func checkAnswer() {
-        let correct = cards[currentIndex]
-            .meaning
+        let correct = cards[currentIndex].meaning
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .lowercased()
         
@@ -134,11 +145,18 @@ struct FlashcardView: View {
 
         if input == correct {
             feedbackColor = .green
-            xp = min(xp + 10, cards.count * 10)
+            progress.xp = min(progress.xp + 10, cards.count * 10)
         } else {
             feedbackColor = .red
         }
+
+        do {
+            try modelContext.save()
+        } catch {
+            Logger.os.debug("❌ Error saving progress: \(error.localizedDescription)")
+        }
     }
+
 
     private func reset() {
         userInput = ""

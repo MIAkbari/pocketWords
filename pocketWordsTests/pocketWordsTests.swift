@@ -14,7 +14,7 @@ final class pocketWordsTests: XCTestCase {
     
     var viewModel: FlashcardViewModel!
     
-    // MARK: - Init
+    // MARK: - Setup & Teardown
     
     override func setUp() {
         super.setUp()
@@ -26,50 +26,33 @@ final class pocketWordsTests: XCTestCase {
         super.tearDown()
     }
     
-    // MARK: - ViewModels
+    // MARK: - ViewModel Tests
     
     func testExactMatch_ReturnsTrue() {
-        let result = viewModel.checkAnswer(userInput: "سیب", correctMeaning: "سیب")
-        XCTAssertTrue(result, "Exact matching words should return true.")
+        XCTAssertTrue(viewModel.checkAnswer(userInput: "Apple", correctMeaning: "Apple"))
     }
     
     func testAnswerWithExtraSpaces_ReturnsTrue() {
-        let result = viewModel.checkAnswer(userInput: "  سیب  ", correctMeaning: "سیب")
-        XCTAssertTrue(result, "Input with leading/trailing spaces should be trimmed and accepted.")
+        XCTAssertTrue(viewModel.checkAnswer(userInput: "  Apple  ", correctMeaning: "Apple"))
     }
     
     func testCaseInsensitiveAnswer_ReturnsTrue() {
-        let result = viewModel.checkAnswer(userInput: "سیب", correctMeaning: "سیب".uppercased())
-        XCTAssertTrue(result, "Input with different cases should be considered correct.")
+        XCTAssertTrue(viewModel.checkAnswer(userInput: "Apple", correctMeaning: "Apple".uppercased()))
     }
     
     func testIncorrectAnswer_ReturnsFalse() {
-        let result = viewModel.checkAnswer(userInput: "ماشین", correctMeaning: "سیب")
-        XCTAssertFalse(result, "Incorrect answer should return false.")
+        XCTAssertFalse(viewModel.checkAnswer(userInput: "Car", correctMeaning: "Apple"))
     }
     
     func testEmptyAnswer_ReturnsFalse() {
-        let result = viewModel.checkAnswer(userInput: "", correctMeaning: "سیب")
-        XCTAssertFalse(result, "Empty input should return false.")
+        XCTAssertFalse(viewModel.checkAnswer(userInput: "", correctMeaning: "Apple"))
     }
     
     func testOnlyWhitespaceInput_ReturnsFalse() {
-        let result = viewModel.checkAnswer(userInput: "     ", correctMeaning: "سیب")
-        XCTAssertFalse(result, "Whitespace-only input should return false.")
+        XCTAssertFalse(viewModel.checkAnswer(userInput: "     ", correctMeaning: "Apple"))
     }
     
     func testWhitespaceInBothSides_ReturnsTrue() {
-        let result = viewModel.checkAnswer(userInput: "  سیب  ", correctMeaning: "  سیب ")
-        XCTAssertTrue(result, "Trimming should be applied to both input and correct answer.")
+        XCTAssertTrue(viewModel.checkAnswer(userInput: "  Apple  ", correctMeaning: "  Apple "))
     }
-    
-    // MARK: - AnswerChecker
-    func testCorrectAnswer() {
-        XCTAssertTrue(AnswerChecker.isCorrect(userInput: " Hello ", correctAnswer: "hello"))
-    }
-    
-    func testIncorrectAnswer() {
-        XCTAssertFalse(AnswerChecker.isCorrect(userInput: "Hi", correctAnswer: "hello"))
-    }
-    
 }

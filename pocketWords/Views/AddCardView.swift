@@ -9,6 +9,7 @@
 
 import SwiftUI
 import SwiftData
+import OSLog
 
 struct AddCardView: View {
     
@@ -54,14 +55,26 @@ struct AddCardView: View {
     
     private var saveButtonView: some View {
         Button("Save") {
-            let newCard = WordCard(word: word, meaning: meaning)
-            modelContext.insert(newCard)
+            saveCard()
             dismiss()
+
         }
         .disabled(word.isEmpty || meaning.isEmpty)
         .accessibilityLabel("Save Word")
         .accessibilityHint("Tap to save the new word card")
 
+    }
+    
+    // MARK: - Func
+    
+    private func saveCard() {
+        let card = WordCard(word: word, meaning: meaning)
+        modelContext.insert(card)
+        do {
+            try modelContext.save()
+        } catch {
+            Logger.os.debug("❌ Error saving: \(error.localizedDescription)")
+        }
     }
 }
 

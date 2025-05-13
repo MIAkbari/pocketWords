@@ -14,7 +14,7 @@ struct pocketWordsApp: App {
             NavigationStack {
                 FlashcardView()
             }
-            .modelContainer(for: WordCard.self)
+            .modelContainer(for: [WordCard.self, UserProgress.self]) // if lat model use Schema.allModels
         }
     }
 }
