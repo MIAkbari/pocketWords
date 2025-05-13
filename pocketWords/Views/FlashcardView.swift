@@ -87,13 +87,18 @@ struct FlashcardView: View {
             .accessibilityLabel("Meaning input field")
             .accessibilityHint("Type your guess for the meaning and press return.")
 
-        VStack(spacing: 8) {
-            ProgressView(value: Double(xp), total: Double(cards.count * 10))
+        progressView
+    }
+    
+    private var progressView: some View {
+        let totalXP = max(1, cards.count * 10)
+        return VStack(spacing: 8) {
+            ProgressView(value: Double(xp), total: Double(totalXP))
                 .progressViewStyle(.linear)
                 .tint(.green)
                 .frame(height: 10)
 
-            Text("XP: \(xp) / \(cards.count * 10)")
+            Text("XP: \(xp) / \(totalXP)")
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -129,7 +134,7 @@ struct FlashcardView: View {
 
         if input == correct {
             feedbackColor = .green
-            xp += 10
+            xp = min(xp + 10, cards.count * 10)
         } else {
             feedbackColor = .red
         }
