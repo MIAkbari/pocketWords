@@ -8,6 +8,7 @@
 
 import Foundation
 
+// MARK: - For Test
 struct AnswerChecker {
     static func isCorrect(userInput: String, correctAnswer: String) -> Bool {
         userInput.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ==

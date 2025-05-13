@@ -11,7 +11,10 @@ import SwiftUI
 struct pocketWordsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                FlashcardView()
+            }
+            .modelContainer(for: WordCard.self)
         }
     }
 }
